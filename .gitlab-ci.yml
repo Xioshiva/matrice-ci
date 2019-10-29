@@ -1,21 +1,7 @@
 image: pkunzli/debian-algo
 
 test:
-  before_script:
-    - cp /files/cunit-to-junit.xsl .
 
   script:
-    - make
     - make test
 
-  after_script:
-    - xsltproc -novalid cunit-to-junit.xsl CUnitAutomated-Results.xml > TestResults.xml
-    - junit-viewer --results=TestResults.xml > TestResults.html
-  
-  artifacts:
-    when: always
-    expire_in: 100 years
-    paths:
-      - TestResults.html
-    reports:
-      junit: TestResults.xml
