@@ -26,6 +26,6 @@ GARBAGE := $(foreach DIR,$(DIRS),$(addprefix $(DIR)/,$(GARBAGE_PATTERNS)))
 
 clean:
 	rm -rf $(GARBAGE)
-	rm -f image_tool test
+	rm -f matrix_compute test
 
 .PHONY: clean test
