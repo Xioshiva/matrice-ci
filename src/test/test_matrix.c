@@ -77,7 +77,7 @@ void test_matrix_resize(){
     matrix mat1 = matrix_create_from_array(m1, n1, array1);
     matrix mat2 = matrix_create_from_array(m2, n2, array2);
     CU_ASSERT(matrix_resize(&mat, -1, 2) == 0);
-    matrix_resize(&mat, m2, m2);
+    matrix_resize(&mat, m2, n2);
     CU_ASSERT(matrix_is_equal(mat, mat2));
     matrix_resize(&mat, m1, n1);
     CU_ASSERT(matrix_is_equal(mat, mat1));
