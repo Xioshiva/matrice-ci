@@ -387,7 +387,7 @@ void test_matrix_transpose(){
     matrix mat1 = matrix_create_from_array(n, m, array1);
     CU_ASSERT(!matrix_is_equal(mat, mat1));
     matrix mat2 = matrix_transpose(mat);
-    CU_ASSERT(matrix_is_equal(mat, mat2));
+    CU_ASSERT(matrix_is_equal(mat1, mat2));
     matrix_destroy(&mat);
     matrix_destroy(&mat1);
     matrix_destroy(&mat2);
