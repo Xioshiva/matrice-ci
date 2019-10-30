@@ -11,6 +11,7 @@ void test_matrix_create(){
     CU_ASSERT(mat.data != NULL);
     CU_ASSERT(mat.m == m);
     CU_ASSERT(mat.n == n);
+    printf("salut");
     matrix_destroy(&mat);
 }
 
