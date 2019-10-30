@@ -11,7 +11,6 @@ void test_matrix_create(){
     CU_ASSERT(mat.data != NULL);
     CU_ASSERT(mat.m == m);
     CU_ASSERT(mat.n == n);
-    printf("salut");
     matrix_destroy(&mat);
 }
 
@@ -196,8 +195,8 @@ void test_matrix_mult_in_place(){
     matrix mat1 = matrix_create_from_array(m1, n1, array1);
     matrix mat2 = matrix_create_from_array(m2, n2, array2);
     matrix mat3 = matrix_create_from_array(m1, n2, array3);
-    CU_ASSERT(matrix_mult_in_place(mat1, mat1)==0);
-    matrix_mult_in_place(mat1, mat2);
+    CU_ASSERT(matrix_mult_in_place(&mat1, mat1)==0);
+    matrix_mult_in_place(&mat1, mat2);
     CU_ASSERT(matrix_is_equal(mat1, mat3));
     matrix_destroy(&mat1);
     matrix_destroy(&mat2);
@@ -250,7 +249,7 @@ void test_matrix_transpose_in_place(){
     matrix mat = matrix_create_from_array(m, n, array);
     matrix mat1 = matrix_create_from_array(n, m, array1);
     CU_ASSERT(!matrix_is_equal(mat, mat1));
-    matrix_transpose_in_place(mat);
+    matrix_transpose_in_place(&mat);
     CU_ASSERT(matrix_is_equal(mat, mat1));
     matrix_destroy(&mat);
     matrix_destroy(&mat1);

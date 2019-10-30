@@ -28,13 +28,13 @@ int matrix_add_in_place(matrix mat1, matrix mat2);
 
 int matrix_sub_in_place(matrix mat1, matrix mat2);
 
-int matrix_mult_in_place(matrix mat1, matrix mat2);
+int matrix_mult_in_place(matrix *mat1, matrix mat2);
 
 int matrix_add_scalar_in_place(matrix mat1, double n);
 
 int matrix_mult_scalar_in_place(matrix mat1, double n);
 
-int matrix_transpose_in_place(matrix mat);
+int matrix_transpose_in_place(matrix *mat);
 
 matrix matrix_add(matrix mat1, matrix mat2);
 

@@ -43,7 +43,7 @@ int matrix_sub_in_place(matrix mat1, matrix mat2){
     return 1;
 }
 
-int matrix_mult_in_place(matrix mat1, matrix mat2){
+int matrix_mult_in_place(matrix *mat1, matrix mat2){
     return 1;
 }
 
@@ -55,7 +55,7 @@ int matrix_mult_scalar_in_place(matrix mat1, double n){
     return 1;
 }
 
-int matrix_transpose_in_place(matrix mat){
+int matrix_transpose_in_place(matrix *mat){
     return 1;
 }
 
