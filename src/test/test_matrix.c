@@ -89,47 +89,61 @@ void test_matrix_resize(){
 void test_matrix_is_approx_equal(){
     int m = 2; int n = 2;
     int m1 = 3; int n1 = 4;
+    int m2 = 3; int n2 = 2;
     double epsilon = 0.1;
     double array1[] = {0.0, 1.0, 2.0,  3.0,
                        4.0, 5.0, 6.0,  7.0, 
                        8.0, 9.0, 10.0, 11.0};
-    double array2[] = {0.0, 1.0, 2.0-epsilon,  3.0,
-                       4.0, 5.0+epsilon, 6.0,  7.0, 
+    double array2[] = {0.0, 1.0, 2.0-(epsilon-epsilon/100.0),  3.0,
+                       4.0, 5.0+(epsilon-epsilon/100.0), 6.0,  7.0, 
                        8.0, 9.0, 10.0, 11.0};
     double array3[] = {0.0, 1.0, 2.0,  3.0,
-                       4.0, 5.0+epsilon+0.1, 6.0,  7.0, 
+                       4.0, 5.0+(epsilon-epsilon/100.0)+0.1, 6.0,  7.0, 
                        8.0, 9.0, 10.0, 11.0};
+    double array4[] = {0.0, 1.0,
+                       2.0, 3.0,
+                       4.0, 5.0};
     matrix mat = matrix_create(m, n);
     matrix mat1 = matrix_create_from_array(m1, n1, array1);
     matrix mat2 = matrix_create_from_array(m1, n1, array2);
     matrix mat3 = matrix_create_from_array(m1, n1, array3);
+    matrix mat4 = matrix_create_from_array(m2, n2, array4);
     CU_ASSERT(!matrix_is_approx_equal(mat, mat1, epsilon));
     CU_ASSERT(matrix_is_approx_equal(mat1, mat2, epsilon));
     CU_ASSERT(!matrix_is_approx_equal(mat1, mat3, epsilon));
+    CU_ASSERT(matrix_is_approx_equal(mat4, mat4, epsilon));
     matrix_destroy(&mat);
     matrix_destroy(&mat1);
     matrix_destroy(&mat2);
     matrix_destroy(&mat3);
+    matrix_destroy(&mat4);
 }
 
 void test_matrix_is_equal(){
     int m = 2; int n = 2;
     int m1 = 3; int n1 = 4;
+    int m2 = 3; int n2 = 2;
     double array1[] = {0.0, 1.0, 2.0,  3.0,
                        4.0, 5.0, 6.0,  7.0, 
                        8.0, 9.0, 10.0, 11.0};
     double array2[] = {0.0, 1.0, 1.9,  3.0,
                        4.0, 5.1, 6.0,  7.0, 
                        8.0, 9.0, 10.0, 11.0};
+    double array3[] = {0.0, 1.0,
+                       2.0, 3.0,
+                       4.0, 5.0};
     matrix mat = matrix_create(m, n);
     matrix mat1 = matrix_create_from_array(m1, n1, array1);
     matrix mat2 = matrix_create_from_array(m1, n1, array2);
+    matrix mat3 = matrix_create_from_array(m2, n2, array3);
     CU_ASSERT(!matrix_is_equal(mat, mat1));
     CU_ASSERT(matrix_is_equal(mat1, mat1));
     CU_ASSERT(!matrix_is_equal(mat1, mat2));
+    CU_ASSERT(matrix_is_equal(mat3, mat3));
     matrix_destroy(&mat);
     matrix_destroy(&mat1);
     matrix_destroy(&mat2);
+    matrix_destroy(&mat3);
 }
 
 void test_matrix_add_in_place(){
