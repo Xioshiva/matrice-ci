@@ -3,14 +3,14 @@ COMPILE_OPTS= -Wall -Wextra -g -std=c11
 OPTIM_OPTS= -O3
 # il faut lancer docker en mode privileged pour les leak check
 SANITIZERS= -fsanitize=address -fsanitize=undefined -fno-omit-frame-pointer 
-LIBS=-lcunit -lm -lSDL2
+LIBS=-lcunit -lm
 
-all: matrix_compute compile_test
+all: image_transform compile_test
 
-matrix_compute: src/matrix_compute.o src/matrix.o
+image_transform: src/image_transform.o src/matrix.o
 	$(CC) $^ -o $@ $(LIBS) $(SANITIZERS) $(OPTIM_OPTS)
 
-compile_test: src/test/test.o src/test/test_matrix.o src/matrix.o
+compile_test: src/test/test.o src/test/test_matrix.o src/matrix.o src/test/test_pgm.o src/pgm.o src/test/test_geom.o src/geom.o
 	$(CC) $^ -o test $(LIBS) $(SANITIZERS) $(OPTIM_OPTS)
 
 test: compile_test
@@ -26,6 +26,6 @@ GARBAGE := $(foreach DIR,$(DIRS),$(addprefix $(DIR)/,$(GARBAGE_PATTERNS)))
 
 clean:
 	rm -rf $(GARBAGE)
-	rm -f matrix_compute test
+	rm -f image_transform test
 
 .PHONY: clean test

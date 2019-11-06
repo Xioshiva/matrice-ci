@@ -27,6 +27,8 @@ void test_matrix_mult_scalar_in_place();
 
 void test_matrix_transpose_in_place();
 
+void test_matrix_normalize_in_place();
+
 void test_matrix_add();
 
 void test_matrix_sub();
@@ -38,5 +40,7 @@ void test_matrix_add_scalar();
 void test_matrix_mult_scalar();
 
 void test_matrix_transpose();
+
+void test_matrix_normalize();
 
 #endif

@@ -269,6 +269,38 @@ void test_matrix_transpose_in_place(){
     matrix_destroy(&mat1);
 }
 
+void test_matrix_normalize_in_place(){
+    matrix mat1, mat2, expected1, expected2;
+    double datamat1[] = {0.8, 0.5, 0.9,
+                       1.0, 2.0, 1.0,
+                       1.0, 1.0, 1.0};
+    double dataexpected1[] = {0.4, 0.25, 0.45,
+                            0.5, 1.0,  0.5,
+                            0.5, 0.5, 0.5};
+    double datamat2[] = {0.5, 0.2, 0.1,
+                       0.4, 0.1, 0.1,
+                       0.1, 0.1, 0.1};
+    double dataexpected2[] = {1.0, 0.4, 0.2,
+                            0.8, 0.2, 0.2,
+                            0.2, 0.2, 0.2};
+    // nullness
+    mat1.data = NULL;
+    CU_ASSERT(matrix_normalize_in_place(mat1)<1);
+    // values
+    mat1 = matrix_create_from_array(3, 3, datamat1);
+    mat2 = matrix_create_from_array(3, 3, datamat2);
+    expected1 = matrix_create_from_array(3, 3, dataexpected1);
+    expected2 = matrix_create_from_array(3, 3, dataexpected2);
+    matrix_normalize_in_place(mat1);
+    CU_ASSERT(matrix_is_equal(expected1, mat1));
+    matrix_normalize_in_place(mat2);
+    CU_ASSERT(matrix_is_equal(expected2, mat2));
+    matrix_destroy(&mat1);
+    matrix_destroy(&mat2);
+    matrix_destroy(&expected1);
+    matrix_destroy(&expected2);
+}
+
 void test_matrix_add(){
     int m = 3; int n = 4;
     int m1 = 2; int n1 = 4;
@@ -405,4 +437,40 @@ void test_matrix_transpose(){
     matrix_destroy(&mat);
     matrix_destroy(&mat1);
     matrix_destroy(&mat2);
+}
+
+void test_matrix_normalize(){
+    matrix mat1, mat2, res, expected1, expected2;
+    double datamat1[] = {0.8, 0.5, 0.9,
+                       1.0, 2.0, 1.0,
+                       1.0, 1.0, 1.0};
+    double dataexpected1[] = {0.4, 0.25, 0.45,
+                            0.5, 1.0,  0.5,
+                            0.5, 0.5, 0.5};
+    double datamat2[] = {0.5, 0.2, 0.1,
+                       0.4, 0.1, 0.1,
+                       0.1, 0.1, 0.1};
+    double dataexpected2[] = {1.0, 0.4, 0.2,
+                            0.8, 0.2, 0.2,
+                            0.2, 0.2, 0.2};
+    // nullness
+    mat1.data = NULL;
+    res = matrix_normalize(mat1);
+    CU_ASSERT(res.data==NULL);
+    // values
+    mat1 = matrix_create_from_array(3, 3, datamat1);
+    mat2 = matrix_create_from_array(3, 3, datamat2);
+    expected1 = matrix_create_from_array(3, 3, dataexpected1);
+    expected2 = matrix_create_from_array(3, 3, dataexpected2);
+    res = matrix_normalize(mat1);
+    CU_ASSERT(matrix_is_equal(expected1, res));
+    matrix_destroy(&res);
+    CU_ASSERT(!matrix_is_equal(expected2, res));
+    res = matrix_normalize(mat2);
+    CU_ASSERT(matrix_is_equal(expected2, res));
+    matrix_destroy(&mat1);
+    matrix_destroy(&mat2);
+    matrix_destroy(&expected1);
+    matrix_destroy(&expected2);
+    matrix_destroy(&res);
 }

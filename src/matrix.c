@@ -59,6 +59,10 @@ int matrix_transpose_in_place(matrix *mat){
     return 1;
 }
 
+int matrix_normalize_in_place(matrix mat){
+    return 1;
+}
+
 matrix matrix_add(matrix mat1, matrix mat2){
     matrix mat;
     return mat;
@@ -85,6 +89,11 @@ matrix matrix_mult_scalar(matrix mat, double n){
 }
 
 matrix matrix_transpose(matrix mat){
+    matrix newmat;
+    return newmat;
+}
+
+matrix matrix_normalize(matrix mat){
     matrix newmat;
     return newmat;
 }
