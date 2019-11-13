@@ -7,7 +7,7 @@ LIBS=-lcunit -lm
 
 all: image_transform compile_test
 
-image_transform: src/image_transform.o src/matrix.o
+image_transform: src/image_transform.o src/matrix.o src/pgm.o src/geom.o src/filter.o
 	$(CC) $^ -o $@ $(LIBS) $(SANITIZERS) $(OPTIM_OPTS)
 
 compile_test: src/test/test.o src/test/test_matrix.o src/matrix.o src/test/test_pgm.o src/pgm.o src/test/test_geom.o src/geom.o src/test/test_filter.o src/filter.o
