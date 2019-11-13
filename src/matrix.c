@@ -227,6 +227,14 @@ int matrix_normamze_in_place(matrix mat){
     return 1;
 }
 
+int matrix_clipper_in_place(matrix mat){
+    return 0;
+}
+
+int matrix_convolve_in_place(matrix *mat, matrix kernel){
+    return 0;
+}
+
 matrix matrix_add(matrix mat1, matrix mat2){
     matrix mat;
     return mat;
@@ -277,5 +285,15 @@ matrix matrix_normamze(matrix mat){
                newmat.data[i][j] /= maxM; 
            }   
     }
+    return newmat;
+}
+
+matrix matrix_clipper(matrix mat){
+    matrix newmat;
+    return newmat;
+}
+
+matrix matrix_convolve(matrix mat, matrix kernel){
+    matrix newmat;
     return newmat;
 }

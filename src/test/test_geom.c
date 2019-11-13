@@ -138,6 +138,14 @@ void test_geom_photomaton_in_place(){
     matrix_destroy(&photomat);
 }
 
+void test_geom_translate_in_place(){
+    CU_ASSERT(false);
+}
+
+void test_geom_zoom_in_place(){
+    CU_ASSERT(false);
+}
+
 void test_geom_vertical_axis_reflect(){
     double datamat[] = {0.0,  1.0,  2.0,  3.0,  4.0,
                         5.0,  6.0,  7.0,  8.0,  9.0,
@@ -282,4 +290,12 @@ void test_geom_photomaton(){
     matrix_destroy(&mat);
     matrix_destroy(&photomat);
     matrix_destroy(&res);
+}
+
+void test_geom_translate(){
+    CU_ASSERT(false);
+}
+
+void test_geom_zoom(){
+    CU_ASSERT(false);
 }

@@ -29,6 +29,10 @@ void test_matrix_transpose_in_place();
 
 void test_matrix_normalize_in_place();
 
+void test_matrix_clipper_in_place();
+
+void test_matrix_convolve_in_place();
+
 void test_matrix_add();
 
 void test_matrix_sub();
@@ -42,5 +46,9 @@ void test_matrix_mult_scalar();
 void test_matrix_transpose();
 
 void test_matrix_normalize();
+
+void test_matrix_clipper();
+
+void test_matrix_convolve();
 
 #endif

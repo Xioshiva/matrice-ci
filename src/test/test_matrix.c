@@ -301,6 +301,14 @@ void test_matrix_normalize_in_place(){
     matrix_destroy(&expected2);
 }
 
+void test_matrix_clipper_in_place(){
+    CU_ASSERT(false);
+}
+
+void test_matrix_convolve_in_place(){
+    CU_ASSERT(false);
+}
+
 void test_matrix_add(){
     int m = 3; int n = 4;
     int m1 = 2; int n1 = 4;
@@ -473,4 +481,12 @@ void test_matrix_normalize(){
     matrix_destroy(&expected1);
     matrix_destroy(&expected2);
     matrix_destroy(&res);
+}
+
+void test_matrix_clipper(){
+    CU_ASSERT(false);
+}
+
+void test_matrix_convolve(){
+    CU_ASSERT(false);
 }
