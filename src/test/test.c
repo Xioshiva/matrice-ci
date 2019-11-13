@@ -1,6 +1,7 @@
 #include "test_matrix.h"
 #include "test_pgm.h"
 #include "test_geom.h"
+#include "test_filter.h"
 #include <stdio.h>
 #include "CUnit/Basic.h"
 #include "CUnit/Automated.h"
@@ -10,6 +11,7 @@ int main() {
     CU_pSuite matrix_suite = NULL;
     CU_pSuite pgm_suite = NULL;
     CU_pSuite geom_suite = NULL;
+    CU_pSuite filter_suite = NULL;
 
     /* initialize the CUnit test registry */
     if (CUE_SUCCESS != CU_initialize_registry()) return CU_get_error();
@@ -35,13 +37,17 @@ int main() {
         (NULL == CU_add_test(matrix_suite, "test of matrix_mult_scalar_in_place", test_matrix_mult_scalar_in_place)) ||
         (NULL == CU_add_test(matrix_suite, "test of matrix_transpose_in_place", test_matrix_transpose_in_place)) ||
         (NULL == CU_add_test(matrix_suite, "test of matrix_normalize_in_place", test_matrix_normalize_in_place)) ||
+        (NULL == CU_add_test(matrix_suite, "test of matrix_clipper_in_place", test_matrix_clipper_in_place)) ||
+        (NULL == CU_add_test(matrix_suite, "test of matrix_convolve_in_place", test_matrix_convolve_in_place)) ||
         (NULL == CU_add_test(matrix_suite, "test of matrix_add", test_matrix_add)) ||
         (NULL == CU_add_test(matrix_suite, "test of matrix_sub", test_matrix_sub)) ||
         (NULL == CU_add_test(matrix_suite, "test of matrix_mult", test_matrix_mult)) ||
         (NULL == CU_add_test(matrix_suite, "test of matrix_add_scalar", test_matrix_add_scalar)) ||
         (NULL == CU_add_test(matrix_suite, "test of matrix_mult_scalar", test_matrix_mult_scalar)) ||
         (NULL == CU_add_test(matrix_suite, "test of matrix_transpose", test_matrix_transpose)) ||
-        (NULL == CU_add_test(matrix_suite, "test of matrix_normalize", test_matrix_normalize)))
+        (NULL == CU_add_test(matrix_suite, "test of matrix_normalize", test_matrix_normalize)) ||
+        (NULL == CU_add_test(matrix_suite, "test of matrix_clipper", test_matrix_clipper)) ||
+        (NULL == CU_add_test(matrix_suite, "test of matrix_convolve", test_matrix_convolve)))
     {
         CU_cleanup_registry();
         return CU_get_error();
@@ -76,11 +82,37 @@ int main() {
         (NULL == CU_add_test(geom_suite, "test of geom_central_reflect_in_place", test_geom_central_reflect_in_place)) ||
         (NULL == CU_add_test(geom_suite, "test of geom_rotate_in_place", test_geom_rotate_in_place)) ||
         (NULL == CU_add_test(geom_suite, "test of geom_photomaton_in_place", test_geom_photomaton_in_place)) ||
+        (NULL == CU_add_test(geom_suite, "test of geom_translate_in_place", test_geom_translate_in_place)) ||
+        (NULL == CU_add_test(geom_suite, "test of geom_zoom_in_place", test_geom_zoom_in_place)) ||
         (NULL == CU_add_test(geom_suite, "test of geom_vertical_axis_reflect", test_geom_vertical_axis_reflect)) ||
         (NULL == CU_add_test(geom_suite, "test of geom_horizontal_axis_reflect", test_geom_horizontal_axis_reflect)) ||
         (NULL == CU_add_test(geom_suite, "test of geom_central_reflect", test_geom_central_reflect)) ||
         (NULL == CU_add_test(geom_suite, "test of geom_rotate", test_geom_rotate)) ||
-        (NULL == CU_add_test(geom_suite, "test of geom_photomaton", test_geom_photomaton)))
+        (NULL == CU_add_test(geom_suite, "test of geom_photomaton", test_geom_photomaton)) ||
+        (NULL == CU_add_test(geom_suite, "test of geom_translate", test_geom_translate)) ||
+        (NULL == CU_add_test(geom_suite, "test of geom_zoom", test_geom_zoom)))
+    {
+        CU_cleanup_registry();
+        return CU_get_error();        
+    }
+
+    /* add a suite to the registry */
+    filter_suite = CU_add_suite("Filter suite", NULL, NULL);
+    if (NULL == pgm_suite) {
+        CU_cleanup_registry();
+        return CU_get_error();
+    }
+
+    if ((NULL == CU_add_test(filter_suite, "test of filter_sharpen_in_place", test_filter_sharpen_in_place)) ||
+        (NULL == CU_add_test(filter_suite, "test of filter_blur_in_place", test_filter_blur_in_place)) ||
+        (NULL == CU_add_test(filter_suite, "test of filter_edge_enhance_in_place", test_filter_edge_enhance_in_place)) ||
+        (NULL == CU_add_test(filter_suite, "test of filter_edge_detect_in_place", test_filter_edge_detect_in_place)) ||
+        (NULL == CU_add_test(filter_suite, "test of filter_emboss_in_place", test_filter_emboss_in_place)) ||
+        (NULL == CU_add_test(filter_suite, "test of filter_sharpen", test_filter_sharpen)) ||
+        (NULL == CU_add_test(filter_suite, "test of filter_blur", test_filter_blur)) ||
+        (NULL == CU_add_test(filter_suite, "test of filter_edge_enhance", test_filter_edge_enhance)) ||
+        (NULL == CU_add_test(filter_suite, "test of filter_edge_detect", test_filter_edge_detect)) ||
+        (NULL == CU_add_test(filter_suite, "test of filter_emboss", test_filter_emboss)))
     {
         CU_cleanup_registry();
         return CU_get_error();        

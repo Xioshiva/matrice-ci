@@ -38,6 +38,10 @@ int matrix_transpose_in_place(matrix *mat);
 
 int matrix_normalize_in_place(matrix mat);
 
+int matrix_clipper_in_place(matrix mat);
+
+int matrix_convolve_in_place(matrix *mat, matrix kernel);
+
 matrix matrix_add(matrix mat1, matrix mat2);
 
 matrix matrix_sub(matrix mat1, matrix mat2);
@@ -51,5 +55,9 @@ matrix matrix_mult_scalar(matrix mat, double n);
 matrix matrix_transpose(matrix mat);
 
 matrix matrix_normalize(matrix mat);
+
+matrix matrix_clipper(matrix mat);
+
+matrix matrix_convolve(matrix mat, matrix kernel);
 
 #endif

@@ -20,6 +20,14 @@ int geom_photomaton_in_place(matrix *mat){
     return 0;
 }
 
+int geom_translate_in_place(matrix *mat, matrix translation){
+    return 0;
+}
+
+int geom_zoom_in_place(matrix *mat, matrix center, matrix factors){
+    return 0;
+}
+
 matrix geom_vertical_axis_reflect(matrix mat){
     matrix res;
     return res;
@@ -41,6 +49,16 @@ matrix geom_rotate(matrix mat, double angle, matrix center){
 }
 
 matrix geom_photomaton(matrix mat){
+    matrix res;
+    return res;
+}
+
+matrix geom_translate(matrix mat, matrix translation){
+    matrix res;
+    return res;
+}
+
+matrix geom_zoom(matrix mat, matrix center, matrix factors){
     matrix res;
     return res;
 }
