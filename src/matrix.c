@@ -22,6 +22,9 @@ void matrix_destroy(matrix *mat){
     {
         free(mat->data[i]);
     }
+    mat->data = NULL;
+    mat->m = -1;
+    mat->n = -1;
     free(mat->data);
 }
 
@@ -63,49 +66,55 @@ void matrix_print(matrix mat){
 }
 
 int matrix_resize(matrix *mat, int m, int n){
-    if(mat->m > m)
-    {
-        for (int i = m; i < mat->m; i++)
-        {
-            free(mat->data[i]);
-        }
-        mat->m = m;
-    }
-    if(mat->n > n)
-    {
-        mat->n = n;
-    }
-    if(mat->m < m || mat->n < n)
-    {
-        matrix Clone = matrix_clone(*mat);
+    if ( m>0 && n>0){
+        matrix matemp = matrix_clone(*mat);
         matrix_destroy(mat);
-        *mat = matrix_create(m,n);
-        for (int i = 0; i < Clone.m; i++)
-        {
-            for (int j = 0; j < Clone.n; j++)
-            {
-                mat->data[i][j] = Clone.data[i][j];
+        *mat = matrix_create(m, n);
+        mat->m = m;
+        mat->n = n;
+
+        for(int i = 0; i <m; i++){
+            for(int j = 0; j<n; j++){
+                if (i<matemp.m && j<matemp.n)
+                    mat->data[i][j] = matemp.data[i][j];
+                else
+                    mat->data[i][j] = 0;
+
             }
         }
+        matrix_destroy(&matemp);
+    return 1;
     }
-    return 0;
+    else
+        return 0;
 }
 
 bool matrix_is_approx_equal(matrix mat1, matrix mat2, double epsilon){
-    epsilon = epsilon + 1;
-    if(mat1.m != mat2.m || mat1.n != mat2.n)
+    
+
+double ep_max = 0.0;
+  double ep_min = 0.0;
+
+  if(mat1.m == mat2.m && mat1.n == mat2.n && epsilon > 0)
+  {
+    for (int i = 0; i < mat1.m; i++)
     {
-        return false;
-    }
-    for (int i = 0; i < mat2.m; i++)
-    {
-        for (int j = 0; j < mat2.n; j++)
+      for (int j = 0; j < mat1.n; j++)
+      {
+        ep_max = mat2.data[i][j]+epsilon;
+        ep_min = mat2.data[i][j]-epsilon;
+        if (mat1.data[i][j] > ep_max || mat1.data[i][j] < ep_min)
         {
-            if(mat1.data[i][j] != mat2.data[i][j])
-                return false;
+          return false;
         }
+      }
     }
     return true;
+  }
+  else
+  {
+    return false;
+  }
 }
 
 bool matrix_is_equal(matrix mat1, matrix mat2){
@@ -121,14 +130,12 @@ bool matrix_is_equal(matrix mat1, matrix mat2){
                 return false;
         }
     }
-    printf("true");
     return true;
 }
 
 int matrix_add_in_place(matrix mat1, matrix mat2){
     if(mat1.m != mat2.m || mat1.n != mat2.n)
     {
-        printf("Doivent etre de la meme taille");
         return 0;
     }
     for (int i = 0; i < mat2.m; i++)
@@ -144,7 +151,6 @@ int matrix_add_in_place(matrix mat1, matrix mat2){
 int matrix_sub_in_place(matrix mat1, matrix mat2){    
     if(mat1.m != mat2.m || mat1.n != mat2.n)
     {
-        printf("Doivent etre de la meme taille");
         return 0;
     }
     for (int i = 0; i < mat2.m; i++)
@@ -168,22 +174,22 @@ int find_bigger(int nbr1, int nbr2)
 int matrix_mult_in_place(matrix *mat1, matrix mat2){
     if(mat1->m != mat2.n)
     {
-        printf("Doivent etre de la meme taille");
         return 0;
     }
-    matrix_resize(mat1,find_bigger(mat1->m,mat2.m), find_bigger(mat1->n,mat2.n));
     matrix matClone = matrix_clone(*mat1);
+    matrix_resize(mat1,mat1->m, mat2.n);
     for (int i = 0; i < mat1->m; i++)
     {
         for (int j = 0; j < mat1->n; j++)
         {
             mat1->data[i][j] = 0;
-            for (int k = 0; k < mat2.n; k++)
+            for (int k = 0; k < matClone.n; k++)
             {
                 mat1->data[i][j] += matClone.data[i][k] * mat2.data[k][j];
             }           
         }
     }
+    matrix_destroy(&matClone);
     return 1;
 }
 
@@ -202,28 +208,44 @@ int matrix_mult_scalar_in_place(matrix mat1, double n){
     for (int i = 0; i < mat1.m; i++)
     {
         for (int j = 0; j < mat1.n; j++)
-        {
+        
             mat1.data[i][j] *= n;   
         }
-    }
     return 1;
 }
 
 int matrix_transpose_in_place(matrix *mat){
     matrix matClone = matrix_clone(*mat);
     matrix_resize(mat, mat->n, mat->m);
-    for (int i = 0; i < mat->m; i++)
+    for (int i = 0; i < matClone.n; i++)
     {
-        for (int j = 0; j < mat->n; j++)
+        for (int j = 0; j < matClone.m; j++)
         {
-            printf("%f\n", matClone.data[i][j]);
-            mat->data[mat->m - i - 1][mat->n - j - 1] = matClone.data[j][i];
+            mat->data[i][j] = matClone.data[j][i];
         }
     }
     return 1;
 }
 
-int matrix_normamze_in_place(matrix mat){
+int matrix_normalize_in_place(matrix mat){
+    double maxM = 0;
+    for (int i = 0; i < mat.m; i++)
+    {
+        printf("%d\n", mat.m);
+        printf("%d\n", mat.n);
+        for (int j = 0; j < mat.n; j++)
+           {
+               //if (maxM < mat.data[i][j])
+                   maxM = mat.data[i][j];
+           }   
+    }
+    for (int i = 0; i < mat.m; ++i)
+    {
+        for (int j = 0; j < mat.n; j++)
+           {
+               mat.data[i][j] /= maxM; 
+           }   
+    }
     return 1;
 }
 
@@ -236,7 +258,18 @@ int matrix_convolve_in_place(matrix *mat, matrix kernel){
 }
 
 matrix matrix_add(matrix mat1, matrix mat2){
-    matrix mat;
+    matrix mat = matrix_create(mat1.m , mat1.n);
+    if(mat1.m != mat2.m || mat1.n != mat2.n)
+    {
+        //return 0;
+    }
+    for (int i = 0; i < mat2.m; i++)
+    {
+        for (int j = 0; j < mat2.n; j++)
+        {
+             mat.data[i][j]= mat1.data[i][j] + mat2.data[i][j];
+        }
+    }
     return mat;
 }
 
@@ -265,7 +298,7 @@ matrix matrix_transpose(matrix mat){
     return newmat;
 }
 
-matrix matrix_normamze(matrix mat){
+matrix matrix_normalize(matrix mat){
     matrix newmat;
     int maxM = 0;
     for (int i = 0; i < newmat.m; i++)
