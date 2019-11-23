@@ -15,7 +15,7 @@ int geom_photomaton_in_place(matrix *mat);
 
 int geom_translate_in_place(matrix *mat, matrix translation);
 
-int geom_zoom_in_place(matrix *mat, matrix center, matrix factors);
+int geom_zoom_in_place(matrix *mat, matrix factors);
 
 matrix geom_vertical_axis_reflect(matrix mat);
 
@@ -29,6 +29,6 @@ matrix geom_photomaton(matrix mat);
 
 matrix geom_translate(matrix mat, matrix translation);
 
-matrix geom_zoom(matrix mat, matrix center, matrix factors);
+matrix geom_zoom(matrix mat, matrix factors);
 
 #endif

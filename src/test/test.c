@@ -26,10 +26,10 @@ int main() {
     if ((NULL == CU_add_test(matrix_suite, "test of matrix_create", test_matrix_create)) ||
         (NULL == CU_add_test(matrix_suite, "test of matrix_destroy", test_matrix_destroy)) ||
         (NULL == CU_add_test(matrix_suite, "test of matrix_create_from_array", test_matrix_create_from_array)) ||
+        (NULL == CU_add_test(matrix_suite, "test of matrix_is_equal", test_matrix_is_equal)) ||
         (NULL == CU_add_test(matrix_suite, "test of matrix_clone", test_matrix_clone)) ||
         (NULL == CU_add_test(matrix_suite, "test of matrix_resize", test_matrix_resize)) ||
         (NULL == CU_add_test(matrix_suite, "test of matrix_is_approx_equal", test_matrix_is_approx_equal)) ||
-        (NULL == CU_add_test(matrix_suite, "test of matrix_is_equal", test_matrix_is_equal)) ||
         (NULL == CU_add_test(matrix_suite, "test of matrix_add_in_place", test_matrix_add_in_place)) ||
         (NULL == CU_add_test(matrix_suite, "test of matrix_sub_in_place", test_matrix_sub_in_place)) ||
         (NULL == CU_add_test(matrix_suite, "test of matrix_mult_in_place", test_matrix_mult_in_place)) ||

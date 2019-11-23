@@ -24,7 +24,7 @@ int geom_translate_in_place(matrix *mat, matrix translation){
     return 0;
 }
 
-int geom_zoom_in_place(matrix *mat, matrix center, matrix factors){
+int geom_zoom_in_place(matrix *mat, matrix factors){
     return 0;
 }
 
@@ -58,7 +58,7 @@ matrix geom_translate(matrix mat, matrix translation){
     return res;
 }
 
-matrix geom_zoom(matrix mat, matrix center, matrix factors){
+matrix geom_zoom(matrix mat, matrix factors){   
     matrix res;
     return res;
 }
