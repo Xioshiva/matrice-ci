@@ -5,6 +5,8 @@
 #include "CUnit/Automated.h"
 #include "math.h"
 
+double epsilon_matrix = 0.000001;
+
 void test_matrix_create(){
     int m = 5; int n = 6;
     matrix mat = matrix_create(m, n);
@@ -164,7 +166,7 @@ void test_matrix_add_in_place(){
     matrix mat4 = matrix_create(m1, n1);
     CU_ASSERT(matrix_add_in_place(mat1, mat4)==0);
     matrix_add_in_place(mat1, mat2);
-    CU_ASSERT(matrix_is_equal(mat1, mat3));
+    CU_ASSERT(matrix_is_approx_equal(mat1, mat3, epsilon_matrix));
     matrix_destroy(&mat1);
     matrix_destroy(&mat2);
     matrix_destroy(&mat3);
@@ -189,7 +191,7 @@ void test_matrix_sub_in_place(){
     matrix mat4 = matrix_create(m1, n1);
     CU_ASSERT(matrix_sub_in_place(mat1, mat4)==0);
     matrix_sub_in_place(mat1, mat2);
-    CU_ASSERT(matrix_is_equal(mat1, mat3));
+    CU_ASSERT(matrix_is_approx_equal(mat1, mat3, epsilon_matrix));
     matrix_destroy(&mat1);
     matrix_destroy(&mat2);
     matrix_destroy(&mat3);
@@ -211,7 +213,7 @@ void test_matrix_mult_in_place(){
     matrix mat3 = matrix_create_from_array(m1, n2, array3);
     CU_ASSERT(matrix_mult_in_place(&mat1, mat1)==0);
     matrix_mult_in_place(&mat1, mat2);
-    CU_ASSERT(matrix_is_equal(mat1, mat3));
+    CU_ASSERT(matrix_is_approx_equal(mat1, mat3, epsilon_matrix));
     matrix_destroy(&mat1);
     matrix_destroy(&mat2);
     matrix_destroy(&mat3);
@@ -228,9 +230,9 @@ void test_matrix_add_scalar_in_place(){
                        9.0, 10.0, 11.0, 12.0};
     matrix mat1 = matrix_create_from_array(m, n, array);
     matrix mat2 = matrix_create_from_array(m, n, array1);
-    CU_ASSERT(!matrix_is_equal(mat1, mat2));
+    CU_ASSERT(!matrix_is_approx_equal(mat1, mat2, epsilon_matrix));
     matrix_add_scalar_in_place(mat1, s);
-    CU_ASSERT(matrix_is_equal(mat1, mat2));
+    CU_ASSERT(matrix_is_approx_equal(mat1, mat2, epsilon_matrix));
     matrix_destroy(&mat1);
     matrix_destroy(&mat2);
 }
@@ -246,9 +248,9 @@ void test_matrix_mult_scalar_in_place(){
                        16.0, 18.0, 20.0, 22.0};
     matrix mat1 = matrix_create_from_array(m, n, array);
     matrix mat2 = matrix_create_from_array(m, n, array1);
-    CU_ASSERT(!matrix_is_equal(mat1, mat2));
+    CU_ASSERT(!matrix_is_approx_equal(mat1, mat2, epsilon_matrix));
     matrix_mult_scalar_in_place(mat1, s);
-    CU_ASSERT(matrix_is_equal(mat1, mat2));
+    CU_ASSERT(matrix_is_approx_equal(mat1, mat2, epsilon_matrix));
     matrix_destroy(&mat1);
     matrix_destroy(&mat2);
 }
@@ -262,9 +264,9 @@ void test_matrix_transpose_in_place(){
                        2.0, 5.0};
     matrix mat = matrix_create_from_array(m, n, array);
     matrix mat1 = matrix_create_from_array(n, m, array1);
-    CU_ASSERT(!matrix_is_equal(mat, mat1));
+    CU_ASSERT(!matrix_is_approx_equal(mat, mat1, epsilon_matrix));
     matrix_transpose_in_place(&mat);
-    CU_ASSERT(matrix_is_equal(mat, mat1));
+    CU_ASSERT(matrix_is_approx_equal(mat, mat1, epsilon_matrix));
     matrix_destroy(&mat);
     matrix_destroy(&mat1);
 }
@@ -292,9 +294,9 @@ void test_matrix_normalize_in_place(){
     expected1 = matrix_create_from_array(3, 3, dataexpected1);
     expected2 = matrix_create_from_array(3, 3, dataexpected2);
     matrix_normalize_in_place(mat1);
-    CU_ASSERT(matrix_is_equal(expected1, mat1));
+    CU_ASSERT(matrix_is_approx_equal(expected1, mat1, epsilon_matrix));
     matrix_normalize_in_place(mat2);
-    CU_ASSERT(matrix_is_equal(expected2, mat2));
+    CU_ASSERT(matrix_is_approx_equal(expected2, mat2, epsilon_matrix));
     matrix_destroy(&mat1);
     matrix_destroy(&mat2);
     matrix_destroy(&expected1);
@@ -312,7 +314,7 @@ void test_matrix_clipper_in_place(){
     mat2.data = NULL;
     CU_ASSERT(matrix_clipper_in_place(mat2)<1);
     CU_ASSERT(matrix_clipper_in_place(mat)==1);
-    CU_ASSERT(matrix_is_equal(mat, expected));
+    CU_ASSERT(matrix_is_approx_equal(mat, expected, epsilon_matrix));
     matrix_destroy(&mat);
     matrix_destroy(&expected);
 }
@@ -358,7 +360,7 @@ void test_matrix_convolve_in_place(){
     mat2.data = NULL;
     CU_ASSERT(matrix_convolve_in_place(&mat2, kernel)<1);
     CU_ASSERT(matrix_convolve_in_place(&mat, kernel)>0);
-    CU_ASSERT(matrix_is_equal(mat, expected));
+    CU_ASSERT(matrix_is_approx_equal(mat, expected, epsilon_matrix));
     matrix_destroy(&mat);
     matrix_destroy(&expected);
     matrix_destroy(&kernel);
@@ -382,9 +384,9 @@ void test_matrix_add(){
     matrix mat4 = matrix_create(m1, n1);
     matrix mat5 = matrix_add(mat1, mat4);
     CU_ASSERT(mat5.data == NULL);
-    CU_ASSERT(!matrix_is_equal(mat1, mat3));
+    CU_ASSERT(!matrix_is_approx_equal(mat1, mat3, epsilon_matrix));
     matrix mat6 = matrix_add(mat1, mat2);
-    CU_ASSERT(matrix_is_equal(mat3, mat6));
+    CU_ASSERT(matrix_is_approx_equal(mat3, mat6, epsilon_matrix));
     matrix_destroy(&mat1);
     matrix_destroy(&mat2);
     matrix_destroy(&mat3);
@@ -411,9 +413,9 @@ void test_matrix_sub(){
     matrix mat4 = matrix_create(m1, n1);
     matrix mat5 = matrix_sub(mat1, mat4); 
     CU_ASSERT(mat5.data == NULL);
-    CU_ASSERT(!matrix_is_equal(mat1, mat3));
+    CU_ASSERT(!matrix_is_approx_equal(mat1, mat3, epsilon_matrix));
     matrix mat6 = matrix_sub(mat1, mat2);
-    CU_ASSERT(matrix_is_equal(mat3, mat6));
+    CU_ASSERT(matrix_is_approx_equal(mat3, mat6, epsilon_matrix));
     matrix_destroy(&mat1);
     matrix_destroy(&mat2);
     matrix_destroy(&mat3);
@@ -437,9 +439,9 @@ void test_matrix_mult(){
     matrix mat3 = matrix_create_from_array(m1, n2, array3);
     matrix mat4 = matrix_mult(mat1, mat1);
     CU_ASSERT(mat4.data == NULL);
-    CU_ASSERT(!matrix_is_equal(mat1, mat3));
+    CU_ASSERT(!matrix_is_approx_equal(mat1, mat3, epsilon_matrix));
     matrix mat5 = matrix_mult(mat1, mat2);
-    CU_ASSERT(matrix_is_equal(mat5, mat3));
+    CU_ASSERT(matrix_is_approx_equal(mat5, mat3, epsilon_matrix));
     matrix_destroy(&mat1);
     matrix_destroy(&mat2);
     matrix_destroy(&mat3);
@@ -458,9 +460,9 @@ void test_matrix_add_scalar(){
                        9.0, 10.0, 11.0, 12.0};
     matrix mat1 = matrix_create_from_array(m, n, array);
     matrix mat2 = matrix_create_from_array(m, n, array1);
-    CU_ASSERT(!matrix_is_equal(mat1, mat2));
+    CU_ASSERT(!matrix_is_approx_equal(mat1, mat2, epsilon_matrix));
     matrix mat3 = matrix_add_scalar(mat1, s);
-    CU_ASSERT(matrix_is_equal(mat3, mat2));
+    CU_ASSERT(matrix_is_approx_equal(mat3, mat2, epsilon_matrix));
     matrix_destroy(&mat1);
     matrix_destroy(&mat2);
     matrix_destroy(&mat3);
@@ -477,9 +479,9 @@ void test_matrix_mult_scalar(){
                        16.0, 18.0, 20.0, 22.0};
     matrix mat1 = matrix_create_from_array(m, n, array);
     matrix mat2 = matrix_create_from_array(m, n, array1);
-    CU_ASSERT(!matrix_is_equal(mat1, mat2));
+    CU_ASSERT(!matrix_is_approx_equal(mat1, mat2, epsilon_matrix));
     matrix mat3 = matrix_mult_scalar(mat1, s);
-    CU_ASSERT(matrix_is_equal(mat3, mat2));
+    CU_ASSERT(matrix_is_approx_equal(mat3, mat2, epsilon_matrix));
     matrix_destroy(&mat1);
     matrix_destroy(&mat2);
     matrix_destroy(&mat3);
@@ -494,9 +496,9 @@ void test_matrix_transpose(){
                        2.0, 5.0};
     matrix mat = matrix_create_from_array(m, n, array);
     matrix mat1 = matrix_create_from_array(n, m, array1);
-    CU_ASSERT(!matrix_is_equal(mat, mat1));
+    CU_ASSERT(!matrix_is_approx_equal(mat, mat1, epsilon_matrix));
     matrix mat2 = matrix_transpose(mat);
-    CU_ASSERT(matrix_is_equal(mat1, mat2));
+    CU_ASSERT(matrix_is_approx_equal(mat1, mat2, epsilon_matrix));
     matrix_destroy(&mat);
     matrix_destroy(&mat1);
     matrix_destroy(&mat2);
@@ -526,11 +528,11 @@ void test_matrix_normalize(){
     expected1 = matrix_create_from_array(3, 3, dataexpected1);
     expected2 = matrix_create_from_array(3, 3, dataexpected2);
     res = matrix_normalize(mat1);
-    CU_ASSERT(matrix_is_equal(expected1, res));
+    CU_ASSERT(matrix_is_approx_equal(expected1, res, epsilon_matrix));
     matrix_destroy(&res);
-    CU_ASSERT(!matrix_is_equal(expected2, res));
+    CU_ASSERT(!matrix_is_approx_equal(expected2, res, epsilon_matrix));
     res = matrix_normalize(mat2);
-    CU_ASSERT(matrix_is_equal(expected2, res));
+    CU_ASSERT(matrix_is_approx_equal(expected2, res, epsilon_matrix));
     matrix_destroy(&mat1);
     matrix_destroy(&mat2);
     matrix_destroy(&expected1);
@@ -550,8 +552,8 @@ void test_matrix_clipper(){
     matrix res = matrix_clipper(mat2);
     CU_ASSERT(res.data==NULL);
     res =  matrix_clipper(mat);
-    CU_ASSERT(matrix_is_equal(res, expected));
-    CU_ASSERT(!matrix_is_equal(mat, expected));
+    CU_ASSERT(matrix_is_approx_equal(res, expected, epsilon_matrix));
+    CU_ASSERT(!matrix_is_approx_equal(mat, expected, epsilon_matrix));
     matrix_destroy(&mat);
     matrix_destroy(&expected);
     matrix_destroy(&res);
@@ -599,8 +601,8 @@ void test_matrix_convolve(){
     matrix res = matrix_convolve(mat2, kernel);
     CU_ASSERT(res.data == NULL);
     res = matrix_convolve(mat, kernel);
-    CU_ASSERT(matrix_is_equal(res, expected));
-    CU_ASSERT(!matrix_is_equal(mat, expected));
+    CU_ASSERT(matrix_is_approx_equal(res, expected, epsilon_matrix));
+    CU_ASSERT(!matrix_is_approx_equal(mat, expected, epsilon_matrix));
     matrix_destroy(&mat);
     matrix_destroy(&expected);
     matrix_destroy(&kernel);

@@ -7,6 +7,8 @@
 #include "CUnit/Automated.h"
 #include <math.h>
 
+double epsilon_geom = 0.000001;
+
 void test_geom_vertical_axis_reflect_in_place(){
     double datamat[] = {0.0,  1.0,  2.0,  3.0,  4.0,
                         5.0,  6.0,  7.0,  8.0,  9.0,
@@ -26,7 +28,7 @@ void test_geom_vertical_axis_reflect_in_place(){
     mat = matrix_create_from_array(5, 5, datamat);
     reflected = matrix_create_from_array(5, 5, datareflected);
     CU_ASSERT(geom_vertical_axis_reflect_in_place(&mat)>0);
-    CU_ASSERT(matrix_is_equal(mat, reflected));
+    CU_ASSERT(matrix_is_approx_equal(mat, reflected, epsilon_geom));
     matrix_destroy(&mat);
     matrix_destroy(&reflected);
 }
@@ -50,7 +52,7 @@ void test_geom_horizontal_axis_reflect_in_place(){
     mat = matrix_create_from_array(5, 5, datamat);
     reflected = matrix_create_from_array(5, 5, datareflected);
     CU_ASSERT(geom_horizontal_axis_reflect_in_place(&mat)>0);
-    CU_ASSERT(matrix_is_equal(mat, reflected));
+    CU_ASSERT(matrix_is_approx_equal(mat, reflected, epsilon_geom));
     matrix_destroy(&mat);
     matrix_destroy(&reflected);
 }
@@ -74,7 +76,7 @@ void test_geom_central_reflect_in_place(){
     mat = matrix_create_from_array(5, 5, datamat);
     reflected = matrix_create_from_array(5, 5, datareflected);
     CU_ASSERT(geom_central_reflect_in_place(&mat)>0);
-    CU_ASSERT(matrix_is_equal(mat, reflected));
+    CU_ASSERT(matrix_is_approx_equal(mat, reflected, epsilon_geom));
     matrix_destroy(&mat);
     matrix_destroy(&reflected);
 }
@@ -102,7 +104,7 @@ void test_geom_rotate_in_place(){
     rotated = matrix_create_from_array(5, 5, datarotated);
     center = matrix_create_from_array(1, 2, datacenter);
     CU_ASSERT(geom_rotate_in_place(&mat, angle, center)>0);
-    CU_ASSERT(matrix_is_equal(mat, rotated));
+    CU_ASSERT(matrix_is_approx_equal(mat, rotated, epsilon_geom));
     matrix_destroy(&mat);
     matrix_destroy(&rotated);
     matrix_destroy(&center);
@@ -133,7 +135,7 @@ void test_geom_photomaton_in_place(){
     // values
     mat = matrix_create_from_array(8, 8, datamat);
     CU_ASSERT(geom_photomaton_in_place(&mat)>0);
-    CU_ASSERT(matrix_is_equal(mat, photomat));
+    CU_ASSERT(matrix_is_approx_equal(mat, photomat, epsilon_geom));
     matrix_destroy(&mat);
     matrix_destroy(&photomat);
 }
@@ -177,7 +179,7 @@ void test_geom_translate_in_place(){
     mat2.data = NULL;
     CU_ASSERT(geom_translate_in_place(&mat2, translate)<1);
     CU_ASSERT(geom_translate_in_place(&mat, translate)==1);
-    CU_ASSERT(matrix_is_equal(mat, expected));
+    CU_ASSERT(matrix_is_approx_equal(mat, expected, epsilon_geom));
     matrix_destroy(&mat);
     matrix_destroy(&translate);
     matrix_destroy(&expected);
@@ -224,7 +226,7 @@ void test_geom_zoom_in_place(){
     mat2.data = NULL;
     CU_ASSERT(geom_zoom_in_place(&mat2, zoom)<1);
     CU_ASSERT(geom_zoom_in_place(&mat, zoom)==1);
-    CU_ASSERT(matrix_is_equal(mat, expected));
+    CU_ASSERT(matrix_is_approx_equal(mat, expected, epsilon_geom));
     matrix_destroy(&mat);
     matrix_destroy(&zoom);
     matrix_destroy(&expected);
@@ -249,9 +251,9 @@ void test_geom_vertical_axis_reflect(){
     // values
     mat = matrix_create_from_array(5, 5, datamat);
     reflected = matrix_create_from_array(5, 5, datareflected);
-    CU_ASSERT(!matrix_is_equal(res, reflected));
+    CU_ASSERT(!matrix_is_approx_equal(res, reflected, epsilon_geom));
     res = geom_vertical_axis_reflect(mat);
-    CU_ASSERT(matrix_is_equal(res, reflected));
+    CU_ASSERT(matrix_is_approx_equal(res, reflected, epsilon_geom));
     matrix_destroy(&mat);
     matrix_destroy(&reflected);
     matrix_destroy(&res);
@@ -276,9 +278,9 @@ void test_geom_horizontal_axis_reflect(){
     // values
     mat = matrix_create_from_array(5, 5, datamat);
     reflected = matrix_create_from_array(5, 5, datareflected);
-    CU_ASSERT(!matrix_is_equal(res, reflected));
+    CU_ASSERT(!matrix_is_approx_equal(res, reflected, epsilon_geom));
     res = geom_horizontal_axis_reflect(mat);
-    CU_ASSERT(matrix_is_equal(res, reflected));
+    CU_ASSERT(matrix_is_approx_equal(res, reflected, epsilon_geom));
     matrix_destroy(&mat);
     matrix_destroy(&reflected);
     matrix_destroy(&res);
@@ -303,9 +305,9 @@ void test_geom_central_reflect(){
     // values
     mat = matrix_create_from_array(5, 5, datamat);
     reflected = matrix_create_from_array(5, 5, datareflected);
-    CU_ASSERT(!matrix_is_equal(res, reflected));
+    CU_ASSERT(!matrix_is_approx_equal(res, reflected, epsilon_geom));
     res = geom_central_reflect(mat);
-    CU_ASSERT(matrix_is_equal(res, reflected));
+    CU_ASSERT(matrix_is_approx_equal(res, reflected, epsilon_geom));
     matrix_destroy(&mat);
     matrix_destroy(&reflected);
     matrix_destroy(&res);
@@ -334,9 +336,9 @@ void test_geom_rotate(){
     mat = matrix_create_from_array(5, 5, datamat);
     rotated = matrix_create_from_array(5, 5, datarotated);
     center = matrix_create_from_array(1, 2, datacenter);
-    CU_ASSERT(!matrix_is_equal(res, rotated));
+    CU_ASSERT(!matrix_is_approx_equal(res, rotated, epsilon_geom));
     res = geom_rotate(mat, angle, center);
-    CU_ASSERT(matrix_is_equal(res, rotated));
+    CU_ASSERT(matrix_is_approx_equal(res, rotated, epsilon_geom));
     matrix_destroy(&mat);
     matrix_destroy(&rotated);
     matrix_destroy(&center);
@@ -368,9 +370,9 @@ void test_geom_photomaton(){
     CU_ASSERT(res.data==NULL);
     // values
     mat = matrix_create_from_array(8, 8, datamat);
-    CU_ASSERT(!matrix_is_equal(res, photomat));
+    CU_ASSERT(!matrix_is_approx_equal(res, photomat, epsilon_geom));
     res = geom_photomaton(mat);
-    CU_ASSERT(matrix_is_equal(res, photomat));
+    CU_ASSERT(matrix_is_approx_equal(res, photomat, epsilon_geom));
     matrix_destroy(&mat);
     matrix_destroy(&photomat);
     matrix_destroy(&res);
@@ -416,8 +418,8 @@ void test_geom_translate(){
     matrix res = geom_translate(mat2, translate);
     CU_ASSERT(res.data==NULL);
     res = geom_translate(mat, translate);
-    CU_ASSERT(matrix_is_equal(res, expected));
-    CU_ASSERT(!matrix_is_equal(mat, expected));
+    CU_ASSERT(matrix_is_approx_equal(res, expected, epsilon_geom));
+    CU_ASSERT(!matrix_is_approx_equal(mat, expected, epsilon_geom));
     matrix_destroy(&mat);
     matrix_destroy(&translate);
     matrix_destroy(&expected);
@@ -466,8 +468,8 @@ void test_geom_zoom(){
     matrix res = geom_zoom(mat2, zoom);
     CU_ASSERT(res.data==NULL);
     res = geom_zoom(mat, zoom);
-    CU_ASSERT(matrix_is_equal(res, expected));
-    CU_ASSERT(!matrix_is_equal(res, mat));
+    CU_ASSERT(matrix_is_approx_equal(res, expected, epsilon_geom));
+    CU_ASSERT(!matrix_is_approx_equal(res, mat, epsilon_geom));
     matrix_destroy(&mat);
     matrix_destroy(&zoom);
     matrix_destroy(&expected);
