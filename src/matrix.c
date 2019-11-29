@@ -229,13 +229,13 @@ int matrix_transpose_in_place(matrix *mat){
 
 int matrix_normalize_in_place(matrix mat){
     double maxM = 0;
+    if(mat.data == NULL)
+    	return 0;
     for (int i = 0; i < mat.m; i++)
     {
-        printf("%d\n", mat.m);
-        printf("%d\n", mat.n);
         for (int j = 0; j < mat.n; j++)
            {
-               //if (maxM < mat.data[i][j])
+               if (maxM < mat.data[i][j])
                    maxM = mat.data[i][j];
            }   
     }
@@ -258,11 +258,12 @@ int matrix_convolve_in_place(matrix *mat, matrix kernel){
 }
 
 matrix matrix_add(matrix mat1, matrix mat2){
-    matrix mat = matrix_create(mat1.m , mat1.n);
+    matrix mat;
     if(mat1.m != mat2.m || mat1.n != mat2.n)
     {
-        //return 0;
+        return mat;
     }
+    mat = matrix_create(mat1.m , mat1.n);
     for (int i = 0; i < mat2.m; i++)
     {
         for (int j = 0; j < mat2.n; j++)
@@ -275,47 +276,98 @@ matrix matrix_add(matrix mat1, matrix mat2){
 
 matrix matrix_sub(matrix mat1, matrix mat2){
     matrix mat;
+    if(mat1.m != mat2.m || mat1.n != mat2.n)
+    {
+        return mat;
+    }
+    mat = matrix_create(mat1.m , mat1.n);
+    for (int i = 0; i < mat2.m; i++)
+    {
+        for (int j = 0; j < mat2.n; j++)
+        {
+             mat.data[i][j]= mat1.data[i][j] - mat2.data[i][j];
+        }
+    }
+    return mat;
     return mat;
 }
 
 matrix matrix_mult(matrix mat1, matrix mat2){
     matrix mat;
+    if(mat1.m != mat2.n)
+    {
+        return mat;
+    }
+    mat = matrix_create(mat1.m , mat2.n);
+    for (int i = 0; i < mat.m; i++)
+    {
+        for (int j = 0; j < mat.n; j++)
+        {
+            for (int k = 0; k < mat1.n; k++)
+            {
+                mat.data[i][j] += mat1.data[i][k] * mat2.data[k][j];
+            }
+            mat.data[i][j] = round(mat.data[i][j]);
+        }
+    }
     return mat;
 }
 
 matrix matrix_add_scalar(matrix mat, double n){
-    matrix newmat;
+    matrix newmat = matrix_clone(mat);
+    for (int i = 0; i < newmat.m; i++)
+    {
+        for (int j = 0; j < newmat.n; j++)
+        {
+            newmat.data[i][j] += n;   
+        }
+    }
     return newmat;
 }
 
 matrix matrix_mult_scalar(matrix mat, double n){
-    matrix newmat;
+    matrix newmat = matrix_clone(mat);
+    for (int i = 0; i < newmat.m; i++)
+    {
+        for (int j = 0; j < newmat.n; j++)
+        {
+            newmat.data[i][j] *= n;   
+        }
+    }
     return newmat;
 }
 
 matrix matrix_transpose(matrix mat){
-    matrix newmat;
+    matrix newmat = matrix_create(mat.n, mat.m);
+    for (int i = 0; i < mat.n; i++)
+    {
+        for (int j = 0; j < mat.m; j++)
+        {
+            newmat.data[i][j] = mat.data[j][i];
+        }
+    }
     return newmat;
 }
 
 matrix matrix_normalize(matrix mat){
     matrix newmat;
-    int maxM = 0;
-    for (int i = 0; i < newmat.m; i++)
+    if(mat.data == NULL)
+    	return newmat;
+    double maxM = 0;
+    newmat = matrix_create(mat.m, mat.n);
+    for (int i = 0; i < mat.m; i++)
     {
-        for (int j = 0; j < newmat.n; j++)
+        for (int j = 0; j < mat.n; j++)
            {
-               if (maxM < newmat.data[i][j])
-               {
-                   maxM = newmat.data[i][j];
-               }
+               if (maxM < mat.data[i][j])
+                   maxM = mat.data[i][j];
            }   
     }
-    for (int i = 0; i < newmat.m; ++i)
+    for (int i = 0; i < mat.m; ++i)
     {
-        for (int j = 0; j < newmat.n; j++)
+        for (int j = 0; j < mat.n; j++)
            {
-               newmat.data[i][j] /= maxM; 
+               newmat.data[i][j] = mat.data[i][j] / maxM; 
            }   
     }
     return newmat;
