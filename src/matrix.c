@@ -5,6 +5,20 @@
 #include <math.h>
 #include <stdbool.h>
 
+int matrix_verrif(matrix mat)
+{
+    if(mat.data == NULL || mat.m < 1 || mat.n < 1)
+        return 0;
+    return 1;
+}
+
+void matrix_nulify(matrix *mat)
+{
+    mat->data = NULL;
+    mat->m = -1;
+    mat->n = -1;
+}
+
 matrix matrix_create(int m, int n){
     matrix mat;
     mat.m = m;
@@ -13,6 +27,13 @@ matrix matrix_create(int m, int n){
     for (int i = 0; i < mat.m; i++)
     {
         mat.data[i] = malloc(mat.n * sizeof(double));
+    }
+    for (int i = 0; i < m; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            mat.data[i][j] = 0;
+        }
     }
     return mat; 
 }
@@ -26,6 +47,7 @@ void matrix_destroy(matrix *mat){
     mat->m = -1;
     mat->n = -1;
     free(mat->data);
+
 }
 
 matrix matrix_create_from_array(int m, int n, double data[]){
@@ -66,7 +88,7 @@ void matrix_print(matrix mat){
 }
 
 int matrix_resize(matrix *mat, int m, int n){
-    if ( m>0 && n>0){
+    if (m > 0 && n > 0){
         matrix matemp = matrix_clone(*mat);
         matrix_destroy(mat);
         *mat = matrix_create(m, n);
@@ -83,38 +105,31 @@ int matrix_resize(matrix *mat, int m, int n){
             }
         }
         matrix_destroy(&matemp);
-    return 1;
+        return 1;
     }
     else
         return 0;
 }
 
 bool matrix_is_approx_equal(matrix mat1, matrix mat2, double epsilon){
-    
-
-double ep_max = 0.0;
-  double ep_min = 0.0;
-
-  if(mat1.m == mat2.m && mat1.n == mat2.n && epsilon > 0)
-  {
-    for (int i = 0; i < mat1.m; i++)
+    double ep_max = 0.0;
+    double ep_min = 0.0;
+    if(mat1.m == mat2.m && mat1.n == mat2.n && epsilon > 0)
     {
-      for (int j = 0; j < mat1.n; j++)
-      {
-        ep_max = mat2.data[i][j]+epsilon;
-        ep_min = mat2.data[i][j]-epsilon;
-        if (mat1.data[i][j] > ep_max || mat1.data[i][j] < ep_min)
+        for (int i = 0; i < mat1.m; i++)
         {
-          return false;
+            for (int j = 0; j < mat1.n; j++)
+            {
+                ep_max = mat2.data[i][j]+epsilon;
+                ep_min = mat2.data[i][j]-epsilon;
+            if (mat1.data[i][j] > ep_max || mat1.data[i][j] < ep_min)
+                return false;
+            }
         }
-      }
-    }
     return true;
   }
   else
-  {
     return false;
-  }
 }
 
 bool matrix_is_equal(matrix mat1, matrix mat2){
@@ -224,6 +239,7 @@ int matrix_transpose_in_place(matrix *mat){
             mat->data[i][j] = matClone.data[j][i];
         }
     }
+    matrix_destroy(&matClone);
     return 1;
 }
 
@@ -250,11 +266,43 @@ int matrix_normalize_in_place(matrix mat){
 }
 
 int matrix_clipper_in_place(matrix mat){
-    return 0;
+    if(mat.data == NULL)
+        return 0;
+    for (int i = 0; i < mat.m; i++)
+    {
+        for (int j = 0; j < mat.n; j++)
+        {
+            if (mat.data[i][j] > 1)
+                mat.data[i][j] = 1;
+            else if (mat.data[i][j] < 0)
+                mat.data[i][j] = 0;
+        }
+    }
+    return 1;
 }
 
 int matrix_convolve_in_place(matrix *mat, matrix kernel){
-    return 0;
+    if(mat->data == NULL || kernel.data == NULL)
+        return 0;
+    matrix matClone = matrix_create(mat->m, mat->n);
+    for (int i = 0; i < mat->m; i++)
+    {
+        for (int j = 0; j < mat->n; j++)
+        {
+            for (int keri = 0; keri < kernel.m; keri++)
+            {
+                for (int kerj= 0; kerj < kernel.n; kerj++)
+                {
+                    if(i + keri - 1 >= 0 && i + keri - 1 < mat->m &&
+                        j + kerj - 1 >= 0 && j + kerj - 1 < mat->n){
+                        matClone.data[i][j] += kernel.data[keri][kerj] * mat->data[i + keri - 1][j + kerj - 1];
+                    }
+                }
+            } 
+        }
+    }
+    *mat = matrix_clone(matClone);
+    return 1;
 }
 
 matrix matrix_add(matrix mat1, matrix mat2){
@@ -288,7 +336,6 @@ matrix matrix_sub(matrix mat1, matrix mat2){
              mat.data[i][j]= mat1.data[i][j] - mat2.data[i][j];
         }
     }
-    return mat;
     return mat;
 }
 
@@ -375,10 +422,42 @@ matrix matrix_normalize(matrix mat){
 
 matrix matrix_clipper(matrix mat){
     matrix newmat;
+    if(mat.data == NULL)
+        return newmat;
+    newmat = matrix_clone(mat);
+    for (int i = 0; i < mat.m; i++)
+    {
+        for (int j = 0; j < mat.n; j++)
+        {
+            if (newmat.data[i][j] > 1)
+                newmat.data[i][j] = 1;
+            else if (newmat.data[i][j] < 0)
+                newmat.data[i][j] = 0;
+        }
+    }
     return newmat;
 }
 
 matrix matrix_convolve(matrix mat, matrix kernel){
     matrix newmat;
+    if(mat.data == NULL || kernel.data == NULL)
+        return newmat;
+    newmat = matrix_create(mat.m, mat.n);
+    for (int i = 0; i < mat.m; i++)
+    {
+        for (int j = 0; j < mat.n; j++)
+        {
+            for (int keri = 0; keri < kernel.m; keri++)
+            {
+                for (int kerj= 0; kerj < kernel.n; kerj++)
+                {
+                    if(i + keri - 1 >= 0 && i + keri - 1 < mat.m &&
+                        j + kerj - 1 >= 0 && j + kerj - 1 < mat.n){
+                        newmat.data[i][j] += kernel.data[keri][kerj] * mat.data[i + keri - 1][j + kerj - 1];
+                    }
+                }
+            } 
+        }
+    }
     return newmat;
 }

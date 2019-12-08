@@ -37,17 +37,17 @@ int main() {
         (NULL == CU_add_test(matrix_suite, "test of matrix_mult_scalar_in_place", test_matrix_mult_scalar_in_place)) ||
         (NULL == CU_add_test(matrix_suite, "test of matrix_transpose_in_place", test_matrix_transpose_in_place)) ||
         (NULL == CU_add_test(matrix_suite, "test of matrix_normalize_in_place", test_matrix_normalize_in_place)) ||
-        //(NULL == CU_add_test(matrix_suite, "test of matrix_clipper_in_place", test_matrix_clipper_in_place)) ||
-        //(NULL == CU_add_test(matrix_suite, "test of matrix_convolve_in_place", test_matrix_convolve_in_place)) ||
+        (NULL == CU_add_test(matrix_suite, "test of matrix_clipper_in_place", test_matrix_clipper_in_place)) ||
+        (NULL == CU_add_test(matrix_suite, "test of matrix_convolve_in_place", test_matrix_convolve_in_place)) ||
         (NULL == CU_add_test(matrix_suite, "test of matrix_add", test_matrix_add)) ||
         (NULL == CU_add_test(matrix_suite, "test of matrix_sub", test_matrix_sub)) ||
         (NULL == CU_add_test(matrix_suite, "test of matrix_mult", test_matrix_mult)) ||
         (NULL == CU_add_test(matrix_suite, "test of matrix_add_scalar", test_matrix_add_scalar)) ||
         (NULL == CU_add_test(matrix_suite, "test of matrix_mult_scalar", test_matrix_mult_scalar)) ||
         (NULL == CU_add_test(matrix_suite, "test of matrix_transpose", test_matrix_transpose)) ||
-        (NULL == CU_add_test(matrix_suite, "test of matrix_normalize", test_matrix_normalize)))
-        //(NULL == CU_add_test(matrix_suite, "test of matrix_clipper", test_matrix_clipper)) ||
-        //(NULL == CU_add_test(matrix_suite, "test of matrix_convolve", test_matrix_convolve)))
+        (NULL == CU_add_test(matrix_suite, "test of matrix_normalize", test_matrix_normalize))||
+        (NULL == CU_add_test(matrix_suite, "test of matrix_clipper", test_matrix_clipper)) ||
+        (NULL == CU_add_test(matrix_suite, "test of matrix_convolve", test_matrix_convolve)))
     {
         CU_cleanup_registry();
         return CU_get_error();
@@ -103,20 +103,20 @@ int main() {
         return CU_get_error();
     }
 
-    // if ((NULL == CU_add_test(filter_suite, "test of filter_sharpen_in_place", test_filter_sharpen_in_place)) ||
-    //     (NULL == CU_add_test(filter_suite, "test of filter_blur_in_place", test_filter_blur_in_place)) ||
-    //     (NULL == CU_add_test(filter_suite, "test of filter_edge_enhance_in_place", test_filter_edge_enhance_in_place)) ||
-    //     (NULL == CU_add_test(filter_suite, "test of filter_edge_detect_in_place", test_filter_edge_detect_in_place)) ||
-    //     (NULL == CU_add_test(filter_suite, "test of filter_emboss_in_place", test_filter_emboss_in_place)) ||
-    //     (NULL == CU_add_test(filter_suite, "test of filter_sharpen", test_filter_sharpen)) ||
-    //     (NULL == CU_add_test(filter_suite, "test of filter_blur", test_filter_blur)) ||
-    //     (NULL == CU_add_test(filter_suite, "test of filter_edge_enhance", test_filter_edge_enhance)) ||
-    //     (NULL == CU_add_test(filter_suite, "test of filter_edge_detect", test_filter_edge_detect)) ||
-    //     (NULL == CU_add_test(filter_suite, "test of filter_emboss", test_filter_emboss)))
-    // {
-    //     CU_cleanup_registry();
-    //     return CU_get_error();        
-    // }
+    if ((NULL == CU_add_test(filter_suite, "test of filter_sharpen_in_place", test_filter_sharpen_in_place)) ||
+        (NULL == CU_add_test(filter_suite, "test of filter_blur_in_place", test_filter_blur_in_place)) ||
+        (NULL == CU_add_test(filter_suite, "test of filter_edge_enhance_in_place", test_filter_edge_enhance_in_place)) ||
+        (NULL == CU_add_test(filter_suite, "test of filter_edge_detect_in_place", test_filter_edge_detect_in_place)) ||
+        (NULL == CU_add_test(filter_suite, "test of filter_emboss_in_place", test_filter_emboss_in_place)) ||
+        (NULL == CU_add_test(filter_suite, "test of filter_sharpen", test_filter_sharpen)) ||
+        (NULL == CU_add_test(filter_suite, "test of filter_blur", test_filter_blur)) ||
+        (NULL == CU_add_test(filter_suite, "test of filter_edge_enhance", test_filter_edge_enhance)) ||
+        (NULL == CU_add_test(filter_suite, "test of filter_edge_detect", test_filter_edge_detect)) ||
+        (NULL == CU_add_test(filter_suite, "test of filter_emboss", test_filter_emboss)))
+    {
+        CU_cleanup_registry();
+        return CU_get_error();        
+    }
 
     /* Run all tests using the CUnit Basic (console output) and Automated (xml output) interface */
     CU_basic_set_mode(CU_BRM_VERBOSE);

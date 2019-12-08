@@ -127,7 +127,7 @@ void test_geom_photomaton_in_place(){
                              81.0, 83.0, 85.0, 87.0, 82.0, 84.0, 86.0, 88.0};
     matrix mat, photomat;
     photomat = matrix_create_from_array(8, 8, dataphotomat);
-    // nullness
+    // nullnessa11...  a1,j−1a1,ja1,j+1...   a1n.....................ai−1,1...  ai−1,j−1ai−1,jai−1,j+1...  ai−1,nai,1...   ai,j−1ai,jai,j+
     mat.data = NULL;
     CU_ASSERT(geom_photomaton_in_place(&mat)==0);
     // values
@@ -340,7 +340,7 @@ void test_geom_rotate(){
     matrix_destroy(&mat);
     matrix_destroy(&rotated);
     matrix_destroy(&center);
-    matrix_destroy(&res);
+    //matrix_destroy(&res);
 }
 
 void test_geom_photomaton(){

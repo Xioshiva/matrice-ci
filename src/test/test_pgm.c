@@ -1,6 +1,9 @@
 #include "../pgm.h"
+#include "test_pgm.h"
 #include "CUnit/Basic.h"
 #include "CUnit/Automated.h"
+
+double epsilon_pgm = 0.000001;
 
 void test_pgm_is_equal(){
     double data1[] = {0.1, 0.2, 0.3, 
@@ -63,9 +66,9 @@ void test_pgm_read(){
     expected.mat = mat_expected;
     read = pgm_read("file_does_not_exist");
     CU_ASSERT(read.max == -1);
-    CU_ASSERT(!pgm_is_equal(read, expected));
+    CU_ASSERT(!pgm_is_approx_equal(read, expected, epsilon_pgm));
     read = pgm_read("src/test/data/test.pgm");
-    CU_ASSERT(pgm_is_equal(read, expected));
+    CU_ASSERT(pgm_is_approx_equal(read, expected, epsilon_pgm));
     pgm_destroy(&expected);
     pgm_destroy(&read);
 }
@@ -75,7 +78,7 @@ void test_pgm_write(){
     read = pgm_read("src/test/data/test.pgm");
     CU_ASSERT(pgm_write("src/test/data/testwrite.pgm", read)==1);
     reread = pgm_read("src/test/data/testwrite.pgm");
-    CU_ASSERT(pgm_is_equal(read, reread));
+    CU_ASSERT(pgm_is_approx_equal(read, reread, epsilon_pgm));
     remove("src/test/data/testwrite.pgm");
     pgm_destroy(&read);
     pgm_destroy(&reread);

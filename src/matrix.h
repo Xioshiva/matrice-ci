@@ -8,6 +8,10 @@ typedef struct matrix {
     double** data;
 } matrix;
 
+int matrix_verrif(matrix mat);
+
+void matrix_nulify(matrix *mat);
+
 matrix matrix_create(int m, int n);
 
 void matrix_destroy(matrix *mat);
