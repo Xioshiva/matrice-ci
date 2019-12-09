@@ -7,26 +7,19 @@
 #include "pgm.h"
 #include "geom.h"
 #include "filter.h"
+#include <ctype.h>
 
-int number_of_tokens(char *line){
-	char *token = strtok(line," \n\t\f");
-	int i = 0;
-	while(token != NULL)
+int check_if_number(char *token)
+{
+	for (unsigned int i = 0; i < strlen(token); i++)
 	{
-		i++;
-		token = strtok(NULL, " \n\t\f");
+		if (!isdigit(token[i]) && token[i] != '.')
+			return 0;
 	}
-	printf("%d\n", i);
-	return i;
+	return 1;
 }
 
 int getcommand(char *line, pgm *image){
-	char *lineclone = malloc(strlen(line) * sizeof(char) + 1);
-	int c = 0;
-	while (line[c] != '\0') {
-    	lineclone[c] = line[c];
-    	c++;
-	}
 	char *token = strtok(line," \n\t\f");
 	if (strcmp(token, "write") == 0) 
 	{
@@ -36,23 +29,31 @@ int getcommand(char *line, pgm *image){
 	else if (strcmp(token, "rotate") == 0)
 	{
 		token = strtok(NULL, " \n\t\f");
+		if (token == NULL || !check_if_number(token))
+			return 0;
 		double m = atoi(token);
 		token = strtok(NULL, " \n\t\f");
+		if (token == NULL || !check_if_number(token))
+			return 0;
 		double n = atoi(token);
 		double array[] = {m, n};
 		matrix mat = matrix_create_from_array(1,2, array);
 		token = strtok(NULL, " \n\t\f");
+		if (token == NULL || !check_if_number(token))
+			return 0;
 		int angle = atoi(token);
 		geom_rotate_in_place(&image->mat, angle, mat);
 		matrix_destroy(&mat);
 	}
 	else if (strcmp(token, "translate") == 0)
 	{
-		// if(number_of_tokens(lineclone) != 4)
-		// 	return 0;
 		token = strtok(NULL, " \n\t\f");
+		if (token == NULL || !check_if_number(token))
+			return 0;
 		double m = atoi(token);
 		token = strtok(NULL, " \n\t\f");
+		if (token == NULL || !check_if_number(token))
+			return 0;
 		double n = atoi(token);
 		double array[] = {m, n};
 		matrix mat = matrix_create_from_array(1,2, array);
@@ -61,11 +62,13 @@ int getcommand(char *line, pgm *image){
 	}
 	else if (strcmp(token, "zoom") == 0)
 	{
-		// if(number_of_tokens(lineclone) != 3)
-		// 	return 0;
 		token = strtok(NULL, " \n\t\f");
+		if (token == NULL || !check_if_number(token))
+			return 0;
 		double m = atoi(token);
 		token = strtok(NULL, " \n\t\f");
+		if (token == NULL || !check_if_number(token))
+			return 0;
 		double n = atoi(token);
 		double array[] = {m, n};
 		matrix mat = matrix_create_from_array(1,2, array);
@@ -74,11 +77,13 @@ int getcommand(char *line, pgm *image){
 	}
 	else if (strcmp(token, "resize") == 0)
 	{
-		// if(number_of_tokens(lineclone) != 3)
-		// 	return 0;
 		token = strtok(NULL, " \n\t\f");
+		if (token == NULL || !check_if_number(token))
+			return 0;
 		int m = atoi(token);
 		token = strtok(NULL, " \n\t\f");
+		if (token == NULL || !check_if_number(token))
+			return 0;
 		int n = atoi(token);
 		matrix_resize(&image->mat, m, n);
 	}
@@ -134,12 +139,11 @@ int main(int argc, char *argv[]) {
     	{	
     		erreur = getcommand(line, &image);
     		if (erreur == 0)
-    		{
     			printf("Erreur de commande ligne %d.\n", i + 1);
-    		}
     	}
 		i++;
     }
+    pgm_destroy(&image);
     fclose(fp);
     if (line)
         free(line);
