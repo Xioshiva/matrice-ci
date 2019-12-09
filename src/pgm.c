@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include "pgm.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -35,9 +36,10 @@ pgm pgm_read(char *filename)
     int size_array = -1;
     int k = 1;
     double* array = NULL;
+    char *token;
     while(getline(&line, &len, fp) >= 0)
     {
-      char *token = strtok(line," \n\t\f");
+      token = strtok(line," \n\t\f");
       while (token != NULL)
       {
         if(token[0] == '#')
@@ -65,11 +67,13 @@ pgm pgm_read(char *filename)
     }
     i++;
   }
+  free(token);
   free(line);
   matrix tmp_matrix = matrix_create_from_array(m,n,array);
   matrix_normalize_in_place(tmp_matrix);
-  matrix_read.mat = tmp_matrix;
+  matrix_read.mat = matrix_clone(tmp_matrix);
   free(array);
+  matrix_destroy(&tmp_matrix);
   fclose(fp);
   return matrix_read;
 }
@@ -110,7 +114,6 @@ bool pgm_is_equal(pgm i1, pgm i2){
 }
 
 bool pgm_is_approx_equal(pgm i1, pgm i2, double epsilon){
-  printf("%d %d\n", i1.max, i2.max);
   if(i1.max != i2.max)
     return false;
   if(matrix_is_approx_equal(i1.mat, i2.mat, epsilon) == false)

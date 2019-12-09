@@ -23,10 +23,11 @@ matrix matrix_create(int m, int n){
     matrix mat;
     mat.m = m;
     mat.n = n;
-    mat.data = malloc(mat.m * sizeof(double*));
-    for (int i = 0; i < mat.m; i++)
+    mat.data = malloc(m * sizeof(double *));
+    mat.data[0] = malloc(n * m * sizeof(double));
+    for (int i = 1; i < m; i++)
     {
-        mat.data[i] = malloc(mat.n * sizeof(double));
+        mat.data[i] = mat.data[0] + i * n;
     }
     for (int i = 0; i < m; i++)
     {
@@ -39,14 +40,11 @@ matrix matrix_create(int m, int n){
 }
 
 void matrix_destroy(matrix *mat){
-    for (int i = 0; i < mat->m; i++)
-    {
-        free(mat->data[i]);
-    }
-    mat->data = NULL;
+    free(mat->data[0]);
+    free(mat->data);
     mat->m = -1;
     mat->n = -1;
-    free(mat->data);
+    mat->data = NULL;
 
 }
 
@@ -301,7 +299,9 @@ int matrix_convolve_in_place(matrix *mat, matrix kernel){
             } 
         }
     }
+    matrix_destroy(mat);
     *mat = matrix_clone(matClone);
+    matrix_destroy(&matClone);
     return 1;
 }
 

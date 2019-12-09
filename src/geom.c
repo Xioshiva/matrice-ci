@@ -9,47 +9,70 @@
 int geom_vertical_axis_reflect_in_place(matrix *mat){
     if(matrix_verrif(*mat) == 0)
         return 0;
-    *mat = geom_vertical_axis_reflect(*mat);
+    matrix matClone = matrix_clone(*mat);
+    matrix_destroy(mat);
+    *mat = geom_vertical_axis_reflect(matClone);
+    matrix_destroy(&matClone);
     return 1;
 }
 
 int geom_horizontal_axis_reflect_in_place(matrix *mat){
     if(matrix_verrif(*mat) == 0)
         return 0;
-    *mat = geom_horizontal_axis_reflect(*mat);
+    matrix matClone = matrix_clone(*mat);
+    matrix_destroy(mat);
+    *mat = geom_horizontal_axis_reflect(matClone);
+    matrix_destroy(&matClone);
     return 1;
 }
 
 int geom_central_reflect_in_place(matrix *mat){
     if(matrix_verrif(*mat) == 0)
         return 0;
-    *mat = geom_central_reflect(*mat);
+    matrix matClone = matrix_clone(*mat);
+    matrix_destroy(mat);
+    *mat = geom_central_reflect(matClone);
+    matrix_destroy(&matClone);
     return 1;
 }
 
 int geom_rotate_in_place(matrix *mat, double angle, matrix center){
-    //a faire
-    return 0;
+    if(matrix_verrif(*mat) == 0)
+        return 0;
+    matrix matClone = matrix_clone(*mat);
+    matrix_destroy(mat);
+    *mat = geom_rotate(matClone, angle, center);
+    matrix_destroy(&matClone);
+    return 1;
 }
 
 int geom_photomaton_in_place(matrix *mat){
     if(mat->m % 2 != 0 || mat->n % 2 != 0 || matrix_verrif(*mat) == 0)
         return 0;
-    *mat = geom_photomaton(*mat);
+    matrix matClone = matrix_clone(*mat);
+    matrix_destroy(mat);
+    *mat = geom_photomaton(matClone);
+    matrix_destroy(&matClone);
     return 1;
 }
 
 int geom_translate_in_place(matrix *mat, matrix translation){
     if(matrix_verrif(*mat) == 0)
         return 0;
-    *mat = geom_translate(*mat , translation);
+    matrix matClone = matrix_clone(*mat);
+    matrix_destroy(mat);
+    *mat = geom_translate(matClone , translation);
+    matrix_destroy(&matClone);
     return 1;
 }
 
 int geom_zoom_in_place(matrix *mat, matrix factors){
     if(matrix_verrif(*mat) == 0)
         return 0;
-    *mat = geom_zoom(*mat, factors);
+    matrix matClone = matrix_clone(*mat);
+    matrix_destroy(mat);
+    *mat = geom_zoom(matClone, factors);
+    matrix_destroy(&matClone);
     return 1;
 }
 
@@ -172,6 +195,21 @@ matrix geom_rotate(matrix mat, double angle, matrix center){
     if(matrix_verrif(mat) == 0){
         matrix_nulify(&res);
         return res;
+    }
+    res = matrix_clone(mat);
+    int ii = 0;
+    int jj = 0;
+    for (int i = 0; i < mat.m; i++)
+    {
+        for (int j = 0; j < mat.n; j++)
+        {
+            ii = round((((i - center.data[0][0]) * cos(angle))
+             - ((j - center.data[0][0]) * sin(angle))) + center.data[0][0]);
+            jj = round((((i - center.data[0][1]) * sin(angle))
+             + ((j - center.data[0][1]) * cos(angle))) + center.data[0][1]);
+            if(ii >= 0 && jj >= 0 && ii < res.m && jj < res.n)
+                res.data[i][j] = mat.data[ii][jj];
+        }
     }
     return res;
 }

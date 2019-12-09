@@ -340,7 +340,7 @@ void test_geom_rotate(){
     matrix_destroy(&mat);
     matrix_destroy(&rotated);
     matrix_destroy(&center);
-    //matrix_destroy(&res);
+    matrix_destroy(&res);
 }
 
 void test_geom_photomaton(){

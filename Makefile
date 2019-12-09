@@ -1,5 +1,5 @@
 CC=gcc
-COMPILE_OPTS= -Wall -Wextra -g -std=c11
+COMPILE_OPTS= -Wall -Wextra -g -std=gnu11
 OPTIM_OPTS= -O3
 # il faut lancer docker en mode privileged pour les leak check
 SANITIZERS= -fsanitize=address -fsanitize=undefined -fno-omit-frame-pointer 

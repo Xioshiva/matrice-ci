@@ -8,7 +8,7 @@ void test_filter_sharpen_in_place(){
     pgm image = pgm_read("src/test/data/coffee_square_small.pgm");
     pgm expected = pgm_read("src/test/data/sharpen.pgm");
     filter_sharpen_in_place(&image.mat);
-    pgm_write("src/test/data/test_filter2.pgm", image);
+    pgm_write("src/test/data/test_filter.pgm", image);
     pgm_destroy(&image);
     image = pgm_read("src/test/data/test_filter.pgm");
     remove("src/test/data/test_filter.pgm");

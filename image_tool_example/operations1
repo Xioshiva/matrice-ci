@@ -1,0 +1,7 @@
+read image_tool_example/coffee.pgm
+rotate 300 300 5
+zoom 2 2
+translate 60 100
+resize 700 700
+photomaton
+write output.pgm
